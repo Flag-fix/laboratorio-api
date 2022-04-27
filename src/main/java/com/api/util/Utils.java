@@ -155,4 +155,57 @@ public class Utils {
         }
         return listaPessoas;
     }
+
+    public static ArrayList<PessoaModel> verificaQtdDoadoresTipoSangue(List<PessoaModel> pessoas) {
+        var listaPessoas = new ArrayList<PessoaModel>();
+        var tipoSanguineo = Arrays.asList(TipoSanguineoEnum.values());
+        var valorTipSang = "";
+        for (TipoSanguineoEnum tip : tipoSanguineo) {
+            valorTipSang = tip.getTipo_sanguineo();
+            var idade = 0;
+            var qtdPessoas = 0;
+            var pessoaNova = new PessoaModel();
+            for (PessoaModel p : pessoas) {
+                idade = calculaIdade(p.getData_nasc());
+                if (idade >= 16 && idade <= 69 && p.getPeso() > 50) {
+                    var sanguePessoa = p.getTipo_sanguineo().getTipo_sanguineo();
+                    if (sanguePessoa.equals(valorTipSang) || sanguePessoa == "AB+") {
+                        qtdPessoas += 1;
+                    }else{
+                        if(getDoaApos(sanguePessoa))
+                            qtdPessoas += 1;
+                        else if(getDoaAandBandOneg(sanguePessoa))
+                            qtdPessoas += 1;
+                        else if(getDoaBpos(sanguePessoa))
+                            qtdPessoas += 1;
+                        else if(getDoaABneg(sanguePessoa))
+                            qtdPessoas += 1;
+                    }
+                }
+                if (pessoas.indexOf(p) + 1 == pessoas.toArray().length) {
+                    pessoaNova.setPossiveisDoadores(qtdPessoas);
+                    pessoaNova.setSangue(valorTipSang);
+                    listaPessoas.add(pessoaNova);
+                }
+            }
+        }
+        return listaPessoas;
+    }
+
+    public static boolean getDoaApos(String sanguePessoa) {
+        return sanguePessoa == "A-" || sanguePessoa == "O+" || sanguePessoa == "O-";
+    }
+
+    public static boolean getDoaAandBandOneg(String sanguePessoa) {
+        return sanguePessoa == "O-";
+    }
+
+    public static boolean getDoaBpos(String sanguePessoa) {
+        return sanguePessoa == "B-" || sanguePessoa == "O+" || sanguePessoa == "O-";
+    }
+
+    public static boolean getDoaABneg(String sanguePessoa) {
+        return sanguePessoa == "A-" || sanguePessoa == "B-" || sanguePessoa == "O-";
+    }
+
 }

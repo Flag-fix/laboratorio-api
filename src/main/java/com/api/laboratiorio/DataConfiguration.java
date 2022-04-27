@@ -18,6 +18,7 @@ public class DataConfiguration {
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/laboratorio?useTimezone=true&serverTimezone=America/Sao_Paulo");
 		dataSource.setUsername("su");
+		dataSource.setPassword("");
 		return dataSource;
 	}
 

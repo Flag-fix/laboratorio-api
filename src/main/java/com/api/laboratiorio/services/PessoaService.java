@@ -18,4 +18,5 @@ public interface PessoaService {
     ArrayList<PessoaModel> findAllPessoasIMC();
     ArrayList<PessoaModel> findPorcSexo();
     ArrayList<PessoaModel> findMedTipSang();
+    ArrayList<PessoaModel> findDoadores();
 }

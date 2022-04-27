@@ -55,6 +55,7 @@ public class PessoaServiceImpl implements PessoaService {
                 LOGGER.info("Buscando Pessoa");
                 var pessoa = findByCpf(item.getCpf());
                 if (pessoa == null) {
+                    LOGGER.info("Salvando Pessoa");
                     pessoa = pessoaRepository.save(item);
                     retornoPessoas.add(pessoa);
                 }
@@ -81,18 +82,25 @@ public class PessoaServiceImpl implements PessoaService {
 
     @Override
     public ArrayList<PessoaModel> findAllPessoasIMC() {
+        LOGGER.info("Buscando Todas Faixa etaria imc");
         return verificaFaixaEtariaImc(pessoaRepository.findAll());
     }
 
     @Override
     public ArrayList<PessoaModel> findPorcSexo() {
+        LOGGER.info("Buscando Todas Pessoas obesas por Sexo");
         return calculaQtdObesoSexo(pessoaRepository.findAll());
     }
 
     @Override
     public ArrayList<PessoaModel> findMedTipSang() {
-        var pessoas = pessoaRepository.findAll();
-        return calculaIdadeMediaTipoSang(pessoas);
+        LOGGER.info("Buscando media de idades por tipo sanguineo");
+        return calculaIdadeMediaTipoSang(pessoaRepository.findAll());
     }
 
+    @Override
+    public ArrayList<PessoaModel> findDoadores() {
+        LOGGER.info("Buscando quantidade de doadores por tipo sanguineo");
+        return verificaQtdDoadoresTipoSangue(pessoaRepository.findAll());
+    }
 }

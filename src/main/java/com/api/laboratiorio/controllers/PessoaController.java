@@ -38,8 +38,6 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaService.saveListPessoas(pessoaModel));
     }
 
-
-
     @GetMapping
     public ResponseEntity<Page<PessoaModel>> getAllPessoas(
             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)
@@ -70,5 +68,9 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.OK).body(pessoaService.findMedTipSang());
     }
 
+    @GetMapping("/doadores")
+    public ResponseEntity<Object> getDoadoresSangue() {
+        return ResponseEntity.status(HttpStatus.OK).body(pessoaService.findDoadores());
+    }
 
 }

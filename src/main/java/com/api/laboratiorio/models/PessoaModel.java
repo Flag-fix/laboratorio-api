@@ -94,5 +94,7 @@ public class PessoaModel implements Serializable {
     private Double idadeMedia;
     @Transient
     private String sangue;
+    @Transient
+    private Integer possiveisDoadores;
 
 }

@@ -49,6 +49,7 @@ public class EstadoServiceImpl implements EstadoService {
 
     @Override
     public List<EstadoDTO> getAllPessoasEstados() {
+        LOGGER.info("Buscando quantidade de pessoas por estado");
         return estadoRepository.findByQtdPorEstado();
     }
 
