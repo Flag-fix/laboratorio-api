@@ -1,14 +1,11 @@
 package com.api.laboratiorio.controllers;
 
 import com.api.laboratiorio.dtos.PessoaDto;
-import com.api.laboratiorio.models.CidadeModel;
-import com.api.laboratiorio.models.EstadoModel;
 import com.api.laboratiorio.models.PessoaModel;
 import com.api.laboratiorio.services.CidadeService;
 import com.api.laboratiorio.services.EstadoService;
 import com.api.laboratiorio.services.PessoaService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,6 +18,8 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.api.util.Utils.verificaPersEstCidCriaObjPessoa;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -35,32 +34,11 @@ public class PessoaController {
 
     @PostMapping
     public ResponseEntity<Object> savePessoa(@RequestBody List<@Valid PessoaDto> pessoaDto) {
-        var pessoaModel = new ArrayList<PessoaModel>();
-        var cidadeModel = new ArrayList<CidadeModel>();
-        for (PessoaDto item : pessoaDto) {
-            var estado = estadoService.findBySigla(item.getEstado());
-            var cidade = cidadeService.findByNomeCidade(item.getCidade());
-            if (estado == null) {
-                var estadoNovo = new EstadoModel();
-                estadoNovo.setSigla(item.getEstado());
-                estado = estadoService.save(estadoNovo);
-            }
-            if (cidade == null) {
-                estado = estadoService.findBySigla(item.getEstado());
-                var cidadeNova = new CidadeModel();
-                cidadeNova.setNome(item.getCidade());
-                cidadeNova.setEstado(estado);
-                cidade = cidadeService.save(cidadeNova);
-            }
-            cidade.setEstado(estado);
-            var pessoaNova = new PessoaModel();
-            pessoaNova.setCidade(cidade);
-            cidadeModel.add(cidade);
-            pessoaModel.add(pessoaNova);
-            BeanUtils.copyProperties(item, pessoaNova);
-        }
+        ArrayList<PessoaModel> pessoaModel = verificaPersEstCidCriaObjPessoa(pessoaDto,estadoService,cidadeService);
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaService.saveListPessoas(pessoaModel));
     }
+
+
 
     @GetMapping
     public ResponseEntity<Page<PessoaModel>> getAllPessoas(
@@ -76,4 +54,21 @@ public class PessoaController {
                         pessoaModel -> ResponseEntity.status(HttpStatus.OK).body(pessoaModel))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pessoa Não encontrada."));
     }
+
+    @GetMapping("/imc")
+    public ResponseEntity<Object> getImcPessoaIdade() {
+        return ResponseEntity.status(HttpStatus.OK).body(pessoaService.findAllPessoasIMC());
+    }
+
+    @GetMapping("/obesidade")
+    public ResponseEntity<Object> getQtdObesidadeSexo() {
+        return ResponseEntity.status(HttpStatus.OK).body(pessoaService.findPorcSexo());
+    }
+
+    @GetMapping("/tipo-sanguineo")
+    public ResponseEntity<Object> getMediaTipSang() {
+        return ResponseEntity.status(HttpStatus.OK).body(pessoaService.findMedTipSang());
+    }
+
+
 }

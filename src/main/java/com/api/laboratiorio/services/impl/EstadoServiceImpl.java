@@ -1,19 +1,19 @@
 package com.api.laboratiorio.services.impl;
 
+import com.api.laboratiorio.dtos.EstadoDTO;
 import com.api.laboratiorio.models.EstadoModel;
 import com.api.laboratiorio.repositories.EstadoRepository;
 import com.api.laboratiorio.services.EstadoService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EstadoServiceImpl implements EstadoService {
     private static final Logger LOGGER = LoggerFactory.getLogger(EstadoServiceImpl.class);
 
@@ -45,6 +45,11 @@ public class EstadoServiceImpl implements EstadoService {
             LOGGER.error(e.toString(), e);
             throw e;
         }
+    }
+
+    @Override
+    public List<EstadoDTO> getAllPessoasEstados() {
+        return estadoRepository.findByQtdPorEstado();
     }
 
     @Override

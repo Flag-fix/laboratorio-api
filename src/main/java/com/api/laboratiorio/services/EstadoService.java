@@ -1,5 +1,6 @@
 package com.api.laboratiorio.services;
 
+import com.api.laboratiorio.dtos.EstadoDTO;
 import com.api.laboratiorio.models.EstadoModel;
 
 import java.util.ArrayList;
@@ -16,5 +17,7 @@ public interface EstadoService {
     EstadoModel findBySigla(String sigla);
 
     List<EstadoModel> saveAll(ArrayList<EstadoModel> estado);
+
+    List<EstadoDTO>  getAllPessoasEstados();
 
 }

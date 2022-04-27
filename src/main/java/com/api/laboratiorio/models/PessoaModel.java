@@ -82,4 +82,17 @@ public class PessoaModel implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipoSanguineoEnum tipo_sanguineo;
 
+    @Transient
+    private Double imcMedio;
+    @Transient
+    private String faixaEtaria;
+    @Transient
+    private Double qtdObesoM;
+    @Transient
+    private Double qtdObesoF;
+    @Transient
+    private Double idadeMedia;
+    @Transient
+    private String sangue;
+
 }

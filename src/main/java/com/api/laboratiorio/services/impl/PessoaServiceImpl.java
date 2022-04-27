@@ -1,7 +1,6 @@
 package com.api.laboratiorio.services.impl;
 
-import com.api.laboratiorio.models.CidadeModel;
-import com.api.laboratiorio.models.EstadoModel;
+import com.api.laboratiorio.enums.TipoSanguineoEnum;
 import com.api.laboratiorio.models.PessoaModel;
 import com.api.laboratiorio.repositories.PessoaRepository;
 import com.api.laboratiorio.services.PessoaService;
@@ -14,10 +13,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
+import static com.api.util.Utils.*;
 import static java.util.Objects.isNull;
 
 @Service
@@ -41,7 +41,7 @@ public class PessoaServiceImpl implements PessoaService {
     public Optional<PessoaModel> findById(Long id) {
         LOGGER.info("Buscando Pessoa pelo ID: {}", id);
         Optional<PessoaModel> pessoa = pessoaRepository.findById(id);
-        if(isNull(pessoa)) {
+        if (isNull(pessoa)) {
             throw new RuntimeException("Pessoa não Encontrada");
         }
         return pessoa;
@@ -78,4 +78,21 @@ public class PessoaServiceImpl implements PessoaService {
         LOGGER.info("Buscando Pessoa pelo CPF: {}", cpf);
         return pessoaRepository.findByCpfContainingIgnoreCase(cpf);
     }
+
+    @Override
+    public ArrayList<PessoaModel> findAllPessoasIMC() {
+        return verificaFaixaEtariaImc(pessoaRepository.findAll());
+    }
+
+    @Override
+    public ArrayList<PessoaModel> findPorcSexo() {
+        return calculaQtdObesoSexo(pessoaRepository.findAll());
+    }
+
+    @Override
+    public ArrayList<PessoaModel> findMedTipSang() {
+        var pessoas = pessoaRepository.findAll();
+        return calculaIdadeMediaTipoSang(pessoas);
+    }
+
 }
